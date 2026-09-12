@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>قسم المحاسبة - الترم الأول</title>
+    <!-- مكتبة Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
-            --accent-color: #ef4444; /* أحمر مرعب للوجو */
+            --accent-color: #ef4444;
             --text-color: #f8fafc;
             --sub-text: #94a3b8;
             --primary: #2563eb;
@@ -22,10 +24,7 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1100px; margin: 0 auto; }
 
         /* شاشة تسجيل الدخول */
         #login-screen {
@@ -38,11 +37,7 @@
             text-align: center;
         }
 
-        .input-group {
-            margin-bottom: 15px;
-            text-align: right;
-        }
-
+        .input-group { margin-bottom: 15px; text-align: right; }
         .input-group label { display: block; margin-bottom: 5px; color: var(--sub-text); }
         .input-group input {
             width: 100%;
@@ -66,9 +61,6 @@
             font-size: 16px;
         }
 
-        button:hover { opacity: 0.9; }
-
-        /* الهيدر واللوجو المخيف */
         header {
             display: flex;
             justify-content: space-between;
@@ -78,26 +70,10 @@
             margin-bottom: 25px;
         }
 
-        .scary-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .scary-logo { display: flex; align-items: center; gap: 12px; }
+        .skull-icon { font-size: 32px; filter: drop-shadow(0 0 8px var(--accent-color)); }
+        .logo-text { font-size: 22px; font-weight: 900; color: var(--accent-color); }
 
-        .skull-icon {
-            font-size: 32px;
-            filter: drop-shadow(0 0 8px var(--accent-color));
-        }
-
-        .logo-text {
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--accent-color);
-            letter-spacing: 1px;
-            text-shadow: 0 0 5px rgba(239, 68, 68, 0.4);
-        }
-
-        /* شبكة المواد */
         .subjects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -119,23 +95,15 @@
             padding-bottom: 8px;
         }
 
-        .folder-list {
-            list-style: none;
-            padding: 0;
-        }
-
+        .folder-list { list-style: none; padding: 0; }
         .folder-item {
-            padding: 8px 10px;
-            margin: 5px 0;
+            padding: 10px;
+            margin: 8px 0;
             background: #0f172a;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: 6px;
             font-size: 14px;
         }
 
-        /* لوحة تحكم الأدمن (محمود) */
         .admin-panel {
             background: #1e1b4b;
             border: 1px solid #6366f1;
@@ -145,14 +113,7 @@
             display: none;
         }
 
-        .admin-panel h3 { margin-top: 0; color: #a5b4fc; }
-
-        .file-upload-box {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
+        .file-upload-box { display: flex; gap: 10px; flex-wrap: wrap; }
         .file-upload-box select, .file-upload-box input {
             padding: 8px;
             background: #0f172a;
@@ -162,31 +123,31 @@
         }
 
         .hidden { display: none !important; }
+        .file-link { color: #38bdf8; text-decoration: underline; display: block; margin-top: 4px; word-break: break-all; }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <!-- 1. شاشة تسجيل الدخول -->
+    <!-- 1. شاشة الدخول -->
     <div id="login-screen">
         <h2 style="color: var(--accent-color);">بوابة الدخول 🔒</h2>
         <div class="input-group">
-            <label>اسم المستخدم (Username):</label>
+            <label>اسم المستخدم:</label>
             <input type="text" id="username" placeholder="ادخل اسم المستخدم">
         </div>
         <div class="input-group">
-            <label>كلمة السر (Password):</label>
+            <label>كلمة السر:</label>
             <input type="password" id="password" placeholder="ادخل كلمة السر">
         </div>
         <button onclick="login()">دخول المنصة</button>
         <p id="error-msg" style="color: var(--accent-color); font-size: 13px; margin-top: 10px;"></p>
     </div>
 
-    <!-- 2. محتوى المنصة الرئيسي -->
+    <!-- 2. محتوى المنصة -->
     <div id="main-platform" class="hidden">
         <header>
-            <!-- اللوجو المخيف للمحاسبين -->
             <div class="scary-logo">
                 <span class="skull-icon">💀📊</span>
                 <div>
@@ -200,9 +161,9 @@
             </div>
         </header>
 
-        <!-- لوحة التحكم (تظهر فقط لمحمود MAHMOUD2006) -->
+        <!-- لوحة رفع الملفات (تظهر لمحمود فقط) -->
         <div id="admin-controls" class="admin-panel">
-            <h3>⚙️ لوحة رفع الملفات والصور (خاصة بالمسؤول)</h3>
+            <h3>⚙️ لوحة رفع الملفات والصور أونلاين</h3>
             <div class="file-upload-box">
                 <select id="select-subject">
                     <option value="1">الاقتصاد الدولي</option>
@@ -214,107 +175,47 @@
                 </select>
 
                 <select id="select-category">
-                    <option>محاضرات</option>
-                    <option>سكاشن</option>
-                    <option>كويزات</option>
-                    <option>كتاب الماده</option>
-                    <option>حاجات مهمه للماده</option>
+                    <option value="محاضرات">محاضرات</option>
+                    <option value="سكاشن">سكاشن</option>
+                    <option value="كويزات">كويزات</option>
+                    <option value="كتاب الماده">كتاب الماده</option>
+                    <option value="حاجات مهمه للماده">حاجات مهمه للماده</option>
                 </select>
 
-                <!-- زر يفتح المعرض/Desktop لاختيار الصور أو الملفات -->
-                <input type="file" id="file-input" accept="image/*,.pdf,.docx">
-                
-                <button onclick="uploadFile()" style="width: auto; background: #16a34a;">رفع للمنصة 📤</button>
+                <input type="file" id="file-input">
+                <button id="upload-btn" onclick="uploadFile()" style="width: auto; background: #16a34a;">رفع للمنصة 📤</button>
             </div>
         </div>
 
-        <!-- شبكة عرض المواد -->
-        <div class="subjects-grid">
-
-            <!-- المادة 1 -->
-            <div class="subject-card">
-                <h3 class="subject-title">1. الاقتصاد الدولي</h3>
-                <ul class="folder-list">
-                    <li class="folder-item">📂 محاضرات <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 سكاشن <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 كويزات <span>0 ملفات</span></li>
-                    <li class="folder-item">📘 كتاب الماده <span>0 ملفات</span></li>
-                    <li class="folder-item">⭐ حاجات مهمه للماده <span>0 ملفات</span></li>
-                </ul>
-            </div>
-
-            <!-- المادة 2 -->
-            <div class="subject-card">
-                <h3 class="subject-title">2. اداره التمويل والاستثمار</h3>
-                <ul class="folder-list">
-                    <li class="folder-item">📂 محاضرات <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 سكاشن <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 كويزات <span>0 ملفات</span></li>
-                    <li class="folder-item">📘 كتاب الماده <span>0 ملفات</span></li>
-                    <li class="folder-item">⭐ حاجات مهمه للماده <span>0 ملفات</span></li>
-                </ul>
-            </div>
-
-            <!-- المادة 3 -->
-            <div class="subject-card">
-                <h3 class="subject-title">3. اصول المراجعه</h3>
-                <ul class="folder-list">
-                    <li class="folder-item">📂 محاضرات <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 سكاشن <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 كويزات <span>0 ملفات</span></li>
-                    <li class="folder-item">📘 كتاب الماده <span>0 ملفات</span></li>
-                    <li class="folder-item">⭐ حاجات مهمه للماده <span>0 ملفات</span></li>
-                </ul>
-            </div>
-
-            <!-- المادة 4 -->
-            <div class="subject-card">
-                <h3 class="subject-title">4. محاسبه التكاليف</h3>
-                <ul class="folder-list">
-                    <li class="folder-item">📂 محاضرات <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 سكاشن <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 كويزات <span>0 ملفات</span></li>
-                    <li class="folder-item">📘 كتاب الماده <span>0 ملفات</span></li>
-                    <li class="folder-item">⭐ حاجات مهمه للماده <span>0 ملفات</span></li>
-                </ul>
-            </div>
-
-            <!-- المادة 5 -->
-            <div class="subject-card">
-                <h3 class="subject-title">5. أساليب التنبؤ الاحصائي 1</h3>
-                <ul class="folder-list">
-                    <li class="folder-item">📂 محاضرات <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 سكاشن <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 كويزات <span>0 ملفات</span></li>
-                    <li class="folder-item">📘 كتاب الماده <span>0 ملفات</span></li>
-                    <li class="folder-item">⭐ حاجات مهمه للماده <span>0 ملفات</span></li>
-                </ul>
-            </div>
-
-            <!-- المادة 6 -->
-            <div class="subject-card">
-                <h3 class="subject-title">6. الرقابه والمراجعة الداخلية</h3>
-                <ul class="folder-list">
-                    <li class="folder-item">📂 محاضرات <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 سكاشن <span>0 ملفات</span></li>
-                    <li class="folder-item">📂 كويزات <span>0 ملفات</span></li>
-                    <li class="folder-item">📘 كتاب الماده <span>0 ملفات</span></li>
-                    <li class="folder-item">⭐ حاجات مهمه للماده <span>0 ملفات</span></li>
-                </ul>
-            </div>
-
-        </div>
+        <!-- شبكة المواد -->
+        <div class="subjects-grid" id="subjects-container"></div>
     </div>
 
 </div>
 
 <script>
-    // بيانات الحسابات المسموح لها بالدخول
+    // تم إدراج البيانات الخاصة بك هنا
+    const SUPABASE_URL = 'https://shiiachtncgstchfzcsu.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_NS8B1nLDZYIW90p7lKgcfg_LfRbnDCP';
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const USERS = {
         "Amr2007": { pass: "9999", role: "user", name: "عمرو" },
         "Menna2006": { pass: "8888", role: "user", name: "منة" },
         "MAHMOUD2006": { pass: "Mahmoud2006", role: "admin", name: "محمود (المتحكم)" }
     };
+
+    const SUBJECTS = [
+        { id: "1", name: "الاقتصاد الدولي" },
+        { id: "2", name: "اداره التمويل والاستثمار" },
+        { id: "3", name: "اصول المراجعه" },
+        { id: "4", name: "محاسبه التكاليف" },
+        { id: "5", name: "أساليب التنبؤ الاحصائي 1" },
+        { id: "6", name: "الرقابه والمراجعة الداخلية" }
+    ];
+
+    const CATEGORIES = ["محاضرات", "سكاشن", "كويزات", "كتاب الماده", "حاجات مهمه للماده"];
 
     function login() {
         const u = document.getElementById('username').value.trim();
@@ -328,12 +229,13 @@
             
             document.getElementById('user-badge').innerText = "المستخدم: " + USERS[u].name;
 
-            // إظهار لوحة التحكم للمتحكم (محمود) فقط
             if (USERS[u].role === "admin") {
                 document.getElementById('admin-controls').style.display = "block";
             } else {
                 document.getElementById('admin-controls').style.display = "none";
             }
+
+            loadFilesAndRender();
         } else {
             error.innerText = "اسم المستخدم أو كلمة السر غير صحيحة!";
         }
@@ -342,19 +244,87 @@
     function logout() {
         document.getElementById('main-platform').classList.add('hidden');
         document.getElementById('login-screen').classList.remove('hidden');
-        document.getElementById('username').value = "";
-        document.getElementById('password').value = "";
     }
 
-    function uploadFile() {
+    // رفع الملف مباشرة إلى Supabase Storage
+    async function uploadFile() {
+        const subjectId = document.getElementById('select-subject').value;
+        const category = document.getElementById('select-category').value;
         const fileInput = document.getElementById('file-input');
+        const uploadBtn = document.getElementById('upload-btn');
+
         if (fileInput.files.length === 0) {
             alert("يرجى اختيار صورة أو ملف أولاً!");
             return;
         }
-        const fileName = fileInput.files[0].name;
-        alert(`تم رفع الملف (${fileName}) بنجاح!`);
-        fileInput.value = ""; // إعادة إيقاف الخيار
+
+        const file = fileInput.files[0];
+        const filePath = `${subjectId}/${category}/${Date.now()}_${file.name}`;
+
+        uploadBtn.innerText = "جاري الرفع...";
+        uploadBtn.disabled = true;
+
+        const { data, error } = await supabaseClient
+            .storage
+            .from('accounting-files')
+            .upload(filePath, file);
+
+        uploadBtn.innerText = "رفع للمنصة 📤";
+        uploadBtn.disabled = false;
+
+        if (error) {
+            alert("حدث خطأ أثناء الرفع: " + error.message);
+        } else {
+            alert("تم رفع الملف بنجاح وظهر أونلاين!");
+            fileInput.value = "";
+            loadFilesAndRender();
+        }
+    }
+
+    // جلب قائمة الملفات من Supabase وعرضها
+    async function loadFilesAndRender() {
+        const container = document.getElementById('subjects-container');
+        container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>جاري تحميل البيانات والملفات...</p>";
+
+        let html = "";
+
+        for (let sub of SUBJECTS) {
+            html += `<div class="subject-card">
+                <h3 class="subject-title">${sub.id}. ${sub.name}</h3>
+                <ul class="folder-list">`;
+
+            for (let cat of CATEGORIES) {
+                const { data: files } = await supabaseClient
+                    .storage
+                    .from('accounting-files')
+                    .list(`${sub.id}/${cat}`);
+
+                const count = files ? files.length : 0;
+
+                html += `<li class="folder-item">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span>📂 ${cat}</span>
+                        <span><b>${count}</b> ملفات</span>
+                    </div>`;
+
+                if (files && files.length > 0) {
+                    files.forEach(f => {
+                        const { data: publicUrlData } = supabaseClient
+                            .storage
+                            .from('accounting-files')
+                            .getPublicUrl(`${sub.id}/${cat}/${f.name}`);
+
+                        html += `<a class="file-link" href="${publicUrlData.publicUrl}" target="_blank">📄 ${f.name}</a>`;
+                    });
+                }
+
+                html += `</li>`;
+            }
+
+            html += `</ul></div>`;
+        }
+
+        container.innerHTML = html;
     }
 </script>
 
