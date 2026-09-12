@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-COMMERCE | Diamond Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #05050a;
+            --glass-bg: rgba(18, 24, 38, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --neon-pink: #ff0055;
+            --neon-cyan: #00f3ff;
+            --neon-purple: #9d00ff;
+            --text-main: #ffffff;
+            --text-sub: #a0aec0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            position: relative;
+        }
+
+        /* خلفية بلورية مضيئة بالألماس والنيون */
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 0;
+            pointer-events: none;
+            animation: pulseGlow 8s infinite alternate;
+        }
+
+        .orb-1 { width: 400px; height: 400px; background: var(--neon-pink); top: -100px; right: -100px; opacity: 0.4; }
+        .orb-2 { width: 450px; height: 450px; background: var(--neon-cyan); bottom: -150px; left: -100px; opacity: 0.35; }
+        .orb-3 { width: 300px; height: 300px; background: var(--neon-purple); top: 40%; left: 35%; opacity: 0.25; }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.15) translate(20px, -20px); }
+        }
+
+        /* نافذة تسجيل الدخول */
+        .auth-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 4, 8, 0.85);
+            backdrop-filter: blur(25px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .diamond-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            width: 420px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+                        inset 0 0 20px rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .auth-header h2 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon-cyan);
+        }
+
+        .glass-input {
+            width: 100%;
+            padding: 14px 45px 14px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .glass-input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .glow-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+            transition: all 0.3s;
+        }
+
+        .glow-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.7);
+        }
+
+        /* الواجهة الرئيسية للمنصة */
+        .app-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        .sidebar {
+            width: 340px;
+            background: var(--glass-bg);
+            border-left: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-main);
+        }
+
+        .logo i {
+            color: var(--neon-pink);
+            font-size: 26px;
+            filter: drop-shadow(0 0 10px var(--neon-pink));
+        }
+
+        .track-sec {
+            margin-bottom: 20px;
+        }
+
+        .track-title {
+            font-size: 12px;
+            color: var(--neon-cyan);
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .lesson-card {
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-sub);
+            cursor: pointer;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .lesson-card:hover, .lesson-card.active {
+            background: rgba(0, 243, 255, 0.1);
+            border-color: var(--neon-cyan);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        .main-stage {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .video-box {
+            width: 100%;
+            height: 500px;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .video-box iframe {
+            width: 100%; height: 100%; border: none;
+        }
+
+        .info-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- أضواء الألماس والنيون البلورية -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+
+    <!-- نافذة تسجيل الدخول -->
+    <div class="auth-overlay" id="authModal">
+        <div class="diamond-card">
+            <div class="auth-header">
+                <h2>X-COMMERCE</h2>
+                <p style="color: var(--text-sub); font-size: 13px; margin-top: 5px;">منصة كلية التجارة الذكية</p>
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="loginUser" class="glass-input" placeholder="اسم المستخدم">
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="loginPass" class="glass-input" placeholder="كلمة المرور">
+            </div>
+            <button class="glow-btn" onclick="handleLogin()">دخول المنصة</button>
+        </div>
+    </div>
+
+    <!-- واجهة المنصة الرئيسية -->
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-gem"></i> X-EROR DIAMOND
+            </div>
+
+            <div class="track-sec">
+                <div class="track-title">1. المصطلحات واللغة</div>
+                <div class="lesson-card active" onclick="loadLesson('eng1')">
+                    <i class="fa-solid fa-play"></i> Business English & Interviews
+                </div>
+            </div>
+
+            <div class="track-sec">
+                <div class="track-title">2. المهارات المتقدمة</div>
+                <div class="lesson-card" onclick="loadLesson('excel1')">
+                    <i class="fa-solid fa-file-excel"></i> Advanced Excel Dashboards
+                </div>
+            </div>
+
+            <div class="track-sec">
+                <div class="track-title">3. الأنظمة المحاسبية</div>
+                <div class="lesson-card" onclick="loadLesson('odoo1')">
+                    <i class="fa-solid fa-cubes"></i> Odoo ERP Accounting
+                </div>
+            </div>
+
+            <div class="track-sec">
+                <div class="track-title">4. الذكاء الاصطناعي</div>
+                <div class="lesson-card" onclick="loadLesson('ai1')">
+                    <i class="fa-solid fa-robot"></i> AI Financial Analysis
+                </div>
+            </div>
+
+            <div style="margin-top: auto; padding-top: 15px; border-top: 1px solid var(--glass-border);">
+                <div style="font-size: 13px; color: var(--text-sub);">المستخدم الحالي:</div>
+                <div id="currentUserDisplay" style="font-weight: bold; color: var(--neon-cyan);">زائر</div>
+                <button onclick="logout()" style="background: transparent; border: none; color: var(--neon-pink); font-size: 12px; cursor: pointer; margin-top: 5px;">تسجيل الخروج</button>
+            </div>
+        </div>
+
+        <div class="main-stage">
+            <div class="video-box">
+                <iframe id="videoPlayer" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+            </div>
+
+            <div class="info-panel">
+                <span class="admin-badge" id="lessonBadge">مسار احترافي</span>
+                <h1 id="lessonTitle" style="font-size: 26px; margin-bottom: 10px;">Business English & Interviews</h1>
+                <p id="lessonDesc" style="color: var(--text-sub); line-height: 1.6; font-size: 15px;">
+                    تعلم مصطلحات الأعمال واجتياز المقابلات الشخصية وتجهيز السيرة الذاتية واحتراف اللغة الإنجليزية للشركات.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin() {
+            const u = document.getElementById('loginUser').value.trim();
+            const p = document.getElementById('loginPass').value.trim();
+
+            // 1. حساب الأدمن
+            if (u === "MAHMOUD2006" && p === "Mahmoud2006") {
+                alert("مرحباً بك أستاذ محمود! تم الدخول كـ ADMIN.");
+                unlockPlatform("الأدمن: MAHMOUD2006");
+                return;
+            }
+
+            // 2. حساب الطلاب الموحد
+            if (u === "Mahmoud2000" && p === "00009999") {
+                alert("تم تسجيل الدخول بنجاح! مرحباً بك في المنصة.");
+                unlockPlatform("الطالب: Mahmoud2000");
+                return;
+            }
+
+            alert("بيانات الدخول غير صحيحة!");
+        }
+
+        function unlockPlatform(userName) {
+            document.getElementById('authModal').style.display = 'none';
+            document.getElementById('currentUserDisplay').innerText = userName;
+        }
+
+        function logout() {
+            location.reload();
+        }
+
+        const lessons = {
+            'eng1': { title: 'Business English & Interviews', badge: 'اللغة والإدارة', desc: 'إتقان المصطلحات التجارية، كتابة الإيميلات الرسمية، وأسئلة المقابلات الشخصية.', video: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+            'excel1': { title: 'Advanced Excel Dashboards', badge: 'تحليل البيانات', desc: 'تصميم شيتات الإكسل التفاعلية، بناء Pivot Tables، والدوال الإحصائية والمالية.', video: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+            'odoo1': { title: 'Odoo ERP Accounting', badge: 'الأنظمة المحاسبية', desc: 'إدارة الحسابات العامة، القيود اليومية، والمخازن عبر نظام Odoo العالمي.', video: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+            'ai1': { title: 'AI Financial Analysis', badge: 'الذكاء الاصطناعي', desc: 'كيفية استخدام الذكاء الاصطناعي أوتوماتيكياً لمراجعة الحسابات والتقارير المالية.', video: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
+        };
+
+        function loadLesson(id) {
+            const item = lessons[id];
+            if (!item) return;
+
+            document.getElementById('videoPlayer').src = item.video;
+            document.getElementById('lessonTitle').innerText = item.title;
+            document.getElementById('lessonBadge').innerText = item.badge;
+            document.getElementById('lessonDesc').innerText = item.desc;
+
+            document.querySelectorAll('.lesson-card').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
